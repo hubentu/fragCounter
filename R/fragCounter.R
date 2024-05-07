@@ -567,6 +567,9 @@ PrepareCov = function(bam, skeleton, cov = NULL, reference = NULL, midpoint = TR
         tiles = gr.tile(sl, window)
         cov = bamUtils::bam.cov.gr(bam, intervals = tiles, isPaired = NA, isProperPair = NA, hasUnmappedMate = NA, chunksize = 1e5, verbose = TRUE)  ## counts midpoints of fragments    # Can we increase chunksize?
         cov$count = cov$records/width(cov)
+        idx <- match("reads", colnames(values(cov)))
+        if(!is.na(idx))values(cov) <- values(cov)[,-idx]
+        values(cov) <- DataFrame(reads=values(cov)$records, values(cov))
       }
     }
     else if (!is.null(cov)) {
